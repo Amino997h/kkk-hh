@@ -45,6 +45,25 @@
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
+        pos => showWeather(pos.coords.latitude, pos.coords.longitude),
+        err => document.getElementById("result").innerText = "⚠️ لم أستطع تحديد موقعك"
+      );
+    } else {
+      document.getElementById("result").innerText = "🚫 المتصفح لا يدعم تحديد الموقع";
+    }
+  </script>
+</body>
+</html>          } else {
+            document.getElementById("result").innerText = "⚠️ لم أستطع جلب الطقس لموقعك";
+          }
+        })
+        .catch(err => {
+          document.getElementById("result").innerText = "🚨 حدث خطأ أثناء الاتصال بالخدمة";
+        });
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
         position => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
