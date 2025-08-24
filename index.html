@@ -19,9 +19,13 @@
     function showWeather(lat, lon) {
       const url = https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=ar&units=metric;
 
+      console.log("جاري جلب الطقس من:", url); // ✅ للتأكد من الرابط
+
       fetch(url)
         .then(res => res.json())
         .then(data => {
+          console.log("البيانات الراجعة:", data); // ✅ لعرض الرد
+
           if (data.weather) {
             const condition = data.weather[0].main.toLowerCase();
             let status = "";
@@ -39,37 +43,19 @@
           }
         })
         .catch(err => {
+          console.error("خطأ في الاتصال بالـ API:", err);
           document.getElementById("result").innerText = "🚨 حدث خطأ أثناء الاتصال بالخدمة";
         });
     }
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        pos => showWeather(pos.coords.latitude, pos.coords.longitude),
-        err => document.getElementById("result").innerText = "⚠️ لم أستطع تحديد موقعك"
-      );
-    } else {
-      document.getElementById("result").innerText = "🚫 المتصفح لا يدعم تحديد الموقع";
-    }
-  </script>
-</body>
-</html>          } else {
-            document.getElementById("result").innerText = "⚠️ لم أستطع جلب الطقس لموقعك";
-          }
-        })
-        .catch(err => {
-          document.getElementById("result").innerText = "🚨 حدث خطأ أثناء الاتصال بالخدمة";
-        });
-    }
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          showWeather(lat, lon);
+        pos => {
+          console.log("تم تحديد الموقع:", pos.coords); // ✅ اختبار
+          showWeather(pos.coords.latitude, pos.coords.longitude);
         },
-        error => {
+        err => {
+          console.error("خطأ في تحديد الموقع:", err);
           document.getElementById("result").innerText = "⚠️ لم أستطع تحديد موقعك";
         }
       );
